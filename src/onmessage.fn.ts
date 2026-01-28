@@ -7,7 +7,7 @@ export function onMessage(
   if (typeof obj !== 'object' || obj == null) {
     throw new Error(`Invalid measurement input: ${JSON.stringify(obj)}`);
   }
-  debugger
+
   if (obj.cumulocityType !== 'measurement') {
     return null;
   }
