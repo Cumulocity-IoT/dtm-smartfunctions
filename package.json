@@ -1,0 +1,28 @@
+{
+  "name": "dtm-smartfunctions",
+  "version": "1.0.0",
+  "description": "Cumulocity DTM Smart Functions",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "tsc",
+    "package": "npm run build && copyfiles cumulocity.json dist/ && copyfiles --up 1 src/*.fn.yaml dist/ && copyfiles --up 1 src/*.fn.ts dist/ && npm run zip:adm",
+    "clean": "rimraf dist/",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "zip:native": "cd dist && zip -r ../dtm-fns.zip .",
+    "zip:adm": "node zip.js"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "adm-zip": "^0.5.16",
+    "copyfiles": "^2.4.1",
+    "jest": "^30.2.0",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {}
+}

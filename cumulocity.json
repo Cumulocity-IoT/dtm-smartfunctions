@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "name": "dtm-functions",
+  "description": "Cumulocity DTM Smart Functions",
+  "contextPath": "dtm-fns",
+  "key": "dtm-fns-application-key",
+  "globalTitle": "",
+  "dynamicOptionsUrl": true,
+  "icon": {
+    "class": "c8y-icon c8y-icon-modules"
+  },
+  "docs": {
+    "links": []
+  },
+  "noAppSwitcher": true,
+  "smartFunctions": [
+    "onmessage.fn.yaml"
+  ]
+}

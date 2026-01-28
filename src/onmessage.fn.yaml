@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=../dtm/dtm-fns.schema.json
+
+name: "dtm:onmessage:dataonassets"
+version: "1.0.0"
+description: "Reingest measurements from device into asset context"
+disabled: false
+tags:
+  - "digital_twin"
+  - "data_on_assets"
+  - "measurements"
+smartFunctionFile: "onmessage.fn.js"
+params:
+  key: "value"
+input:
+  type: "measurement"
+  context:
+    linkedAsset: true
+    linkedSeries: true

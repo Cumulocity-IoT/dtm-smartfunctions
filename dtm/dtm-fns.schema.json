@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "properties": {
+        "description": {
+            "type": "string"
+        },
+        "disabled": {
+            "type": "boolean"
+        },
+        "input": {
+            "additionalProperties": false,
+            "properties": {
+                "context": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "linkedAsset": {
+                            "type": "boolean"
+                        },
+                        "linkedSeries": {
+                            "type": "boolean"
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": {
+                    "const": "measurement",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "type": "object"
+        },
+        "name": {
+            "type": "string"
+        },
+        "params": {
+            "additionalProperties": {},
+            "type": "object"
+        },
+        "smartFunctionFile": {
+            "type": "string"
+        },
+        "tags": {
+            "items": {
+                "type": "string"
+            },
+            "type": "array"
+        },
+        "version": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "input",
+        "name",
+        "smartFunctionFile"
+    ],
+    "type": "object"
+}
+
