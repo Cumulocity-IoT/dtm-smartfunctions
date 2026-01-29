@@ -8,23 +8,30 @@ For running tests, the `dtm/SmartFunctionsRunner` utility is provided to execute
  
 ## Installation and Setup
 
+The project requires [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) to be installed for building, testing, and packaging the smart functions.
+
 Install dependencies:
 
 ```bash
 npm install
 ```
 
-### Project Structure
+See [Packaging](#packaging) section for building and packaging the smart functions for deployment to Cumulocity.
+
+## Project Structure
+
+The relevant project files and directories are organized as follows:
 
 ```
 src/
   *.fn.ts         # Smart function implementation
   *.fn.yaml       # Smart function configuration
   *.spec.ts       # Unit tests
-dtm/
-  index.d.ts      # Type definitions for DTM context and types
-  index.js        # Test runner utilities
+dtm/              # DTM types and test utilities 
+cumulocity.json   # Application metadata for deployment
 ```
+
+All other files are related to build, packaging, and development tooling.
 
 ## Smart Functions
 
