@@ -1,21 +1,11 @@
 import * as ts from 'typescript';
 
-type DeepReadonly<T> = {
-    readonly [P in keyof T]: T[P] extends object ? T[P] extends Function ? T[P] : DeepReadonly<T[P]> : T[P];
-};
-
 declare const OnMessageFnName = "onMessage";
+type OnMessageFn<T = CumulocityObject> = (obj: T, context: DtmContext) => T[] | null;
 interface DataPrepContext {
     readonly runtime: 'cumulocity-dtm';
     readonly params?: {
         [key: string]: any;
-    };
-    readonly console?: {
-        log: (...args: any[]) => void;
-        warn: (...args: any[]) => void;
-        error: (...args: any[]) => void;
-        debug: (...args: any[]) => void;
-        verbose: (...args: any[]) => void;
     };
 }
 type DtmLinkedSeries = {
@@ -42,10 +32,10 @@ type DtmAssetLink = {
         [key: string]: string;
     };
 };
-type DtmContext = DataPrepContext & DeepReadonly<{
-    linkedAsset: DtmAssetLink;
-    linkedSeries: DtmLinkedSeries;
-}>;
+type DtmContext = DataPrepContext & {
+    linkedAsset?: DtmAssetLink[];
+    linkedSeries?: DtmLinkedSeries[];
+};
 type CumulocityType = 'measurement' | 'event' | 'alarm' | 'operation' | 'managedObject';
 interface CumulocityObject {
     payload: object;
@@ -104,30 +94,30 @@ type DtmMeasurementInput = {
     linkedSeries?: boolean;
 };
 
+interface SmartFunctionConsole extends ILogger {
+}
+
+type LogLevel = 'error' | 'warn' | 'log' | 'debug' | 'verbose';
+interface ILogger {
+    log: (...args: any[]) => void;
+    debug?: (...args: any[]) => void;
+    warn?: (...args: any[]) => void;
+    error?: (...args: any[]) => void;
+    verbose?: (...args: any[]) => void;
+}
 interface ConsoleLog {
-    level: 'log' | 'warn' | 'error' | 'debug' | 'verbose' | 'info';
+    level: LogLevel;
     args: any[];
     timestamp?: number;
 }
-interface SmartFunctionConsole {
-    log(...args: any[]): void;
-    warn(...args: any[]): void;
-    error(...args: any[]): void;
-    debug(...args: any[]): void;
-    verbose(...args: any[]): void;
-    info(...args: any[]): void;
-}
+
 interface ExecutionEngineOptions {
     timeout?: number;
     memoryLimitMb?: number;
     stackSizeMb?: number;
     captureConsole?: boolean;
     console?: SmartFunctionConsole;
-}
-interface ExecutionResult<O = any> {
-    result: O;
-    logs?: ConsoleLog[];
-    executionTimeMs?: number;
+    logger?: ILogger;
 }
 
 interface SmartFunctionsRunnerOptions extends ExecutionEngineOptions {
@@ -144,7 +134,7 @@ declare class SmartFunctionsRunner {
     private createEngine;
     initialize(): Promise<void>;
     execute<T = any, O = any>(functionName: string, input: T, context?: any): Promise<O>;
-    executeWithLogs<T = any, O = any>(functionName: string, input: T, context?: any): Promise<ExecutionResult<O>>;
+    getConsoleLogs(): ConsoleLog[];
     getTranspiledCode(): string;
     dispose(): void;
 }
@@ -156,4 +146,4 @@ type DtmSmartFunctionExternal = {
 type DtmSmartFunctionManifest = DtmSmartFunctionExternal & Required<Pick<DtmSmartFunction, 'smartFunctionFile' | 'input'>> & Omit<DtmSmartFunction, 'identifier' | 'smartFunctionFile' | 'input' | 'sourceCode' | 'source' | 'enabled'>;
 
 export { OnMessageFnName, SmartFunctionsRunner, isMeasurement };
-export type { CumulocityObject, CumulocityType, DtmAssetLink, DtmContext, DtmLinkedSeries, DtmSmartFunctionManifest, ExternalId, Measurement, MeasurementSource, MeasurementValue, SmartFunctionsRunnerOptions };
+export type { CumulocityObject, CumulocityType, DtmAssetLink, DtmContext, DtmLinkedSeries, DtmSmartFunctionManifest, ExternalId, Measurement, MeasurementSource, MeasurementValue, OnMessageFn, SmartFunctionsRunnerOptions };

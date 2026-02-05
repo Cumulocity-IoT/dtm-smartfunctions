@@ -39,35 +39,35 @@ describe("onMessage Smart Function", () => {
     };
 
     const context = {
-      linkedAsset: {
-        asset: {
-          id: "asset456",
-          series: "T2",
-          fragment: "c8y_Temperature2",
+      linkedAsset: [
+        {
+          asset: {
+            id: "asset456",
+            series: "T2",
+            fragment: "c8y_Temperature2",
+          },
+          fragment: "c8y_Temperature",
+          series: "T",
         },
-        fragment: "c8y_Temperature",
-        series: "T",
-      },
+      ],
     };
 
-    const { result, logs } = await runner.executeWithLogs(
-      "onMessage",
-      measurement,
-      context,
-    );
-
-    expect(result).toEqual({
-      payload: {
-        source: { id: "asset456" },
-        type: "c8y_Temperature",
-        time: "2026-01-26T10:00:00.000Z",
-        c8y_Temperature2: {
-          T2: { value: 25.5, unit: "°C" },
+    const result = await runner.execute("onMessage", measurement, context);
+    const logs = runner.getConsoleLogs();
+    expect(result).toEqual([
+      {
+        payload: {
+          source: { id: "asset456" },
+          type: "c8y_Temperature",
+          time: "2026-01-26T10:00:00.000Z",
+          c8y_Temperature2: {
+            T2: { value: 25.5, unit: "°C" },
+          },
         },
+        cumulocityType: "measurement",
+        destination: "cumulocity",
       },
-      cumulocityType: "measurement",
-      destination: "cumulocity",
-    });
+    ]);
 
     // Verify console logs were captured
     expect(logs).toBeDefined();
@@ -102,7 +102,6 @@ describe("onMessage Smart Function", () => {
     };
 
     const result = await runner.execute("onMessage", measurement, context);
-
     expect(result).toBeNull();
   });
 
@@ -123,20 +122,19 @@ describe("onMessage Smart Function", () => {
     };
 
     const context = {
-      linkedAsset: {
-        asset: null,
-        fragment: "c8y_Temperature",
-        series: "T",
-      },
+      linkedAsset: [
+        {
+          asset: null,
+          fragment: "c8y_Temperature",
+          series: "T",
+        },
+      ],
     };
 
-    const { result, logs } = await runner.executeWithLogs(
-      "onMessage",
-      measurement,
-      context,
-    );
-
-    expect(result).toBeNull();
+    const result = await runner.execute("onMessage", measurement, context);
+    const logs = runner.getConsoleLogs();
+    expect(result).toEqual([]);
+    expect(logs).toBeDefined();
 
     // Verify debug log was captured
     const debugLogs = logs.filter((log) => log.level === "debug");
@@ -168,13 +166,15 @@ describe("onMessage Smart Function", () => {
     };
 
     const context = {
-      linkedAsset: {
-        asset: {
-          id: "asset999",
+      linkedAsset: [
+        {
+          asset: {
+            id: "asset999",
+          },
+          fragment: "c8y_Temperature",
+          series: "T",
         },
-        fragment: "c8y_Temperature",
-        series: "T",
-      },
+      ],
     };
 
     await expect(
@@ -199,13 +199,15 @@ describe("onMessage Smart Function", () => {
     };
 
     const context = {
-      linkedAsset: {
-        asset: {
-          id: "asset777",
+      linkedAsset: [
+        {
+          asset: {
+            id: "asset777",
+          },
+          fragment: "c8y_Temperature",
+          series: "NonExistentSeries",
         },
-        fragment: "c8y_Temperature",
-        series: "NonExistentSeries",
-      },
+      ],
     };
 
     await expect(
@@ -232,20 +234,22 @@ describe("onMessage Smart Function", () => {
     };
 
     const context = {
-      linkedAsset: {
-        asset: {
-          id: "111",
-          series: "P2",
-          fragment: "c8y_Pressure2",
+      linkedAsset: [
+        {
+          asset: {
+            id: "111",
+            series: "P2",
+            fragment: "c8y_Pressure2",
+          },
+          fragment: "c8y_Pressure",
+          series: "P",
         },
-        fragment: "c8y_Pressure",
-        series: "P",
-      },
+      ],
     };
 
     const result = await runner.execute("onMessage", measurement, context);
 
-    expect(result).toEqual({
+    expect(result).toEqual([{
       payload: {
         source: { id: "111" },
         type: "CustomMeasurementType",
@@ -256,6 +260,6 @@ describe("onMessage Smart Function", () => {
       },
       cumulocityType: "measurement",
       destination: "cumulocity",
-    });
+    }]);
   });
 });
