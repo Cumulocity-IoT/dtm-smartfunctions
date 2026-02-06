@@ -41,11 +41,12 @@ The `onMessage` function processes incoming Cumulocity measurements and transfor
 
 **Signature:**
 ```typescript
-export function onMessage(
-  obj: Measurement,
-  context: DtmContext
-): Measurement | Measurement[] | null
+export const onMessage: OnMessageFn<Measurement> = (obj, context) => {
+  // function implementation
+};
 ```
+
+Use `OnMessageFn` type from `../dtm` for type safety and to ensure you are using the correct function signature. `OnMessageFn` requires you to alwas return an array or `null` to skip processing. 
 
 **Input:**
 - `obj` - Measurement object with `payload`, `cumulocityType`, and `destination`
