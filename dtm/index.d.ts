@@ -33,6 +33,7 @@ type DtmAssetLink = {
     };
 };
 type DtmContext = DataPrepContext & {
+    linkedAssetId?: string;
     linkedAsset?: DtmAssetLink[];
     linkedSeries?: DtmLinkedSeries[];
 };
@@ -124,6 +125,7 @@ interface SmartFunctionsRunnerOptions extends ExecutionEngineOptions {
     sourceFile: string;
     baseDir?: string;
     compilerOptions?: ts.CompilerOptions;
+    params?: DtmContext['params'];
 }
 declare class SmartFunctionsRunner {
     private engine;
